@@ -8,7 +8,7 @@ access.log
 error.log
 .htaccess
 /storage/files
-/vendor/
+/vendor
 /public/file
 /file
 /config/lastTelegramUpdate
