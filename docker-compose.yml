@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+    app:
+        build:
+            context: ./docker/app
+        volumes:
+            - ./:/app
+            - ./var/fpm_log/:/var/log/php-fpm/
+        depends_on:
+            - db
+
+    web:
+        build:
+            context: ./docker/web
+        volumes:
+            - ./:/app/
+        depends_on:
+            - app
+        ports:
+            - 80:80
+
+    db:
+        restart: always
+        image: postgres:15-alpine
+        volumes:
+            - ./db_restore:/data/db_restore
+            - db_data:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_DB=${DB_DATABASE}
+            - POSTGRES_USER=${DB_USERNAME}
+            - POSTGRES_PASSWORD=${DB_PASSWORD}
+  
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+          - 8080:8080
+
+volumes:
+    db_data:
