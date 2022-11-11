@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\PdfController;
+use App\Http\Controllers\Api\WorkflowController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group([
+    'prefix' => 'v1',
+], function () {
+    Route::get('/create', [WorkflowController::class, 'makeProcessByData']);
+
+    Route::get('/generate-pdf', [PdfController::class, 'generatePdf']);
 });

@@ -2,4 +2,4 @@
 
 ---
 
-- `we will be use swager for documentation`
+- `we will be use swagger for documentation`
