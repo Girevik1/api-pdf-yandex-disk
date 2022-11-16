@@ -2,50 +2,83 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+// use App\Http\Controllers\Controller;
+use App\Models\ListPdf;
 use Illuminate\Http\Request;
 use Arhitector\Yandex\Client\OAuth;
 use Arhitector\Yandex\Disk;
+use ErrorException;
+use Illuminate\Http\Response;
+
 // use Arhitector\Yandex\Client\Exception\NotFoundException;
 
-class YandexDiskController extends Controller
+class YandexDiskController extends BaseApiController
 {
-    public static function create()
+    private $disk;
+
+    public function __construct()
     {
         // передать OAuth-токен зарегистрированного приложения.
-        $disk = new Disk(env('TOKEN_ACCESS_YANDEX_DISK'));
+        $this->disk = new Disk(config('app.token_yandex'));
+    }
 
-        // $client = new OAuth(env('TOKEN_ACCESS_YANDEX_DISK', ''));
-        // $disk = new Disk($client);
-        // dd($client->refreshAccessToken('developer.david', 'DmHU+Q!7,$GgfZX'));
+    /**
+     * Сохраняет файл на яндекс диск - присваивает уникальное имя
+     * Сохраняем информацию о файле в бд
+     *
+     * @return  array
+     */
+    public static function store(): array|Response
+    {
+        $thisObject = new self;
+        $lastPdf = ListPdf::latest()->first();
+        $countPdf = $lastPdf ? $lastPdf->id : 0;
 
-        /**
-         * Получить Объектно Ориентированное представление закрытого ресурса.
-         * @var  Arhitector\Yandex\Disk\Resource\Closed $resource
-         */
-        $resource = $disk->getResource('test1111121111.pdf');
+        $resource = $thisObject->disk->getResource('offer_' . $countPdf + 1 . '.pdf');
 
-        $has = $resource->has(); // проверить есть ли ресурс на диске.
+        // загружает локальный файл на диск, второй параметр отвечает за перезапись файла, если такой есть на диске.
+        $resource->upload(public_path() . '/pdf/offer.pdf', true);
 
-        if ($has) {
-            return response(['Message' => 'A file with the same name already exists!'], 201);
-        }
-        if (!$has) {
-            // загружает локальный файл на диск. второй параметр отвечает за перезапись файла, если такой есть на диске.
-            // загружает удаленный файл на диск, передайте ссылку http на удаленный файл.
-            $resource->upload(public_path() . '/pdf/art.pdf');
-        }
+        $resource = $resource->toArray(); // получаем массив данных о созданом файле
 
-        $resource = $resource->toArray();
+        // Сохраняем у себя в бд информацию о созданом на янд диске файле
+        $newPdf = new ListPdf();
+        $newPdf->data = json_encode($resource);
+        $newPdf->save(); //
 
-        return response(json_encode([
+        return [
             'size' => $resource['size'],
             'link_doc_download' => $resource['file'],
             'link_doc_viewer' => $resource['docviewer'],
-        ]), 200);
+        ];
+    }
 
-        // теперь удалить в корзину.
-        // $removed = $resource->delete();
-        // $disk->cleanTrash();
+    /**
+     *  Удалить файл по id в корзину и очистить корзину
+     * 
+     * @param   string|int $id id файла,заданного при сох-ии в бд
+     * 
+     * @param   boolean $permanently TRUE Признак безвозвратного удаления
+     *
+     * @return  void
+     */
+    public static function destroyFile(string|int $id, bool $isPermanently): void
+    {
+        $thisObject = new self;
+        $resource = $thisObject->disk->getResource('offer_' . $id . '.pdf');
+
+        if (!$resource->has()) return;
+        $resource->delete($isPermanently);
+
+        // $thisObject->disk->cleanTrash(); // очистить корзину
+    }
+
+    /**
+     * Получить информация о Яндекс.Диске
+     */
+    public function getInfoDisk(): Response
+    {
+        $result = $this->disk->toArray();
+        return response(json_encode($result), 200);
     }
 }

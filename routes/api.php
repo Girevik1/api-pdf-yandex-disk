@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\PdfController;
 use App\Http\Controllers\Api\WorkflowController;
+use App\Http\Controllers\Api\YandexDiskController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,9 +16,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group([
+    'middleware' => ['ensure_token_is_valid'],
     'prefix' => 'v1',
 ], function () {
-    Route::get('/create', [WorkflowController::class, 'makeProcessByData']);
+    // Common actions
+    Route::post('/generate-pdf', [WorkflowController::class, 'makeProcessByData']);
+    Route::delete('/delete/{pdf}', [WorkflowController::class, 'deleteById']);
+    Route::delete('/delete-all', [WorkflowController::class, 'deleteAllFiles']);
 
-    Route::get('/generate-pdf', [PdfController::class, 'generatePdf']);
+    // Yandex
+    Route::get('/get-info-disk', [YandexDiskController::class, 'getInfoDisk']);
 });

@@ -8,6 +8,7 @@
         "php": "^8.0.2",
         "arhitector/yandex": "dev-master",
         "barryvdh/laravel-dompdf": "^2.0",
+        "darkaonline/l5-swagger": "^8.4",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",

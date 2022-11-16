@@ -2,26 +2,23 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+// use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 
-class PdfController extends Controller
+class PdfController extends BaseApiController
 {
-    public static function generatePdf($request = null)
+    public static function generatePdf($data = null)
     {
-        $data = $request; {
+        $pdf = PDF::loadView(
+            'pdf.offer',
+            compact('data')
+        );
 
-            $pdf = PDF::loadView(
-                'pdf.offer',
-                compact('data')
-            );
-
-            $path = public_path('pdf/');
-            $fileName =  'art' . '.' . 'pdf';
-            $pdf->save($path . '/' . $fileName);
-            $pdf->download($fileName);
-        }
+        $path = public_path('pdf/');
+        $fileName =  'offer' . '.' . 'pdf';
+        $pdf->save($path . '/' . $fileName);
+        $pdf->download($fileName);
     }
 }

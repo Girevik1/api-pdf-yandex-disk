@@ -1,0 +1,136 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Documentation API",
+        "contact": {
+            "email": "se6@rep.earth"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost/api/v1",
+            "description": "Generation pdf - API server"
+        }
+    ],
+    "paths": {
+        "/generate-pdf": {
+            "post": {
+                "tags": [
+                    "WorkFlow"
+                ],
+                "summary": "Generate pdf by got data and save it in Yandex disk.",
+                "operationId": "makePdf",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/WorkFlowMakeProcessByDataRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Everything is fine"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "422": {
+                        "description": "Please, check token access"
+                    }
+                },
+                "security": [
+                    {
+                        "api-token": []
+                    }
+                ]
+            }
+        },
+        "/delete/{pdf}": {
+            "delete": {
+                "tags": [
+                    "WorkFlow"
+                ],
+                "summary": "Delete pdf from Yandex disk and information from database on server.",
+                "operationId": "deleteById",
+                "parameters": [
+                    {
+                        "name": "pdf",
+                        "in": "path",
+                        "description": "Pdf number",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api-token": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "WorkFlowMakeProcessByDataRequest": {
+                "title": "Example showing request",
+                "description": "Some simple request createa as example",
+                "properties": {
+                    "id": {
+                        "title": "ID",
+                        "description": "Unique ID",
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "data": {
+                        "title": "Data",
+                        "description": "Name of key for storring",
+                        "type": "string",
+                        "example": "random"
+                    },
+                    "value": {
+                        "title": "Value",
+                        "description": "Value for storring",
+                        "type": "string",
+                        "example": "awesome"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "api-token": {
+                "type": "apiKey",
+                "name": "api-token",
+                "in": "header"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "WorkFlow",
+            "description": "Workflow with pdf"
+        },
+        {
+            "name": "YandexDisk",
+            "description": "Some work with yandex disk"
+        }
+    ]
+}
