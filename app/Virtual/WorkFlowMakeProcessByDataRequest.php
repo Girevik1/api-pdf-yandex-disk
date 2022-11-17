@@ -5,8 +5,8 @@ namespace App\Virtual;
 /**
  * @OA\Schema(
  *     type="object",
- *     title="Example showing request",
- *     description="Some simple request createa as example",
+ *     title="Example - what data should the body consist of",
+ *     description="Some simple request create as example",
  * )
  */
 class WorkFlowMakeProcessByDataRequest

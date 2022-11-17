@@ -7,6 +7,7 @@ build:
 	php artisan config:clear
 	php artisan view:clear
 	php artisan route:clear
+	php artisan l5-swagger:generate
 	# php artisan debugbar:clear
 start:
 	docker-compose up --build

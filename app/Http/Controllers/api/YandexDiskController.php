@@ -2,15 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-// use App\Http\Controllers\Controller;
 use App\Models\ListPdf;
-use Illuminate\Http\Request;
-use Arhitector\Yandex\Client\OAuth;
 use Arhitector\Yandex\Disk;
-use ErrorException;
 use Illuminate\Http\Response;
 
-// use Arhitector\Yandex\Client\Exception\NotFoundException;
 
 class YandexDiskController extends BaseApiController
 {
@@ -18,15 +13,15 @@ class YandexDiskController extends BaseApiController
 
     public function __construct()
     {
-        // передать OAuth-токен зарегистрированного приложения.
+        // pass the OAuth token of the registered application.
         $this->disk = new Disk(config('app.token_yandex'));
     }
 
     /**
-     * Сохраняет файл на яндекс диск - присваивает уникальное имя
-     * Сохраняем информацию о файле в бд
+     * Saves the file to Yandex.Disk - assigns a unique name
+     * Save information about the file in the database
      *
-     * @return  array
+     * @return  array|Response
      */
     public static function store(): array|Response
     {
@@ -54,7 +49,7 @@ class YandexDiskController extends BaseApiController
     }
 
     /**
-     *  Удалить файл по id в корзину и очистить корзину
+     *  Delete file by id to recycle bin and empty recycle bin
      * 
      * @param   string|int $id id файла,заданного при сох-ии в бд
      * 
@@ -69,12 +64,31 @@ class YandexDiskController extends BaseApiController
 
         if (!$resource->has()) return;
         $resource->delete($isPermanently);
-
-        // $thisObject->disk->cleanTrash(); // очистить корзину
     }
 
     /**
-     * Получить информация о Яндекс.Диске
+     * @OA\Get(
+     *     path="/get-info-disk",
+     *     operationId="infoDisk",
+     *     tags={"YandexDisk"},
+     *     summary="Get information about Yandex.Disk",
+     *     security={
+     *       {"api-token": {}},
+     *     },
+     *     @OA\Response(
+     *          response=200,
+     *          description="OK",
+     *      ),
+     *      @OA\Response(
+     *         response="404",
+     *         description="Not Found"
+     *      ),
+     * )
+     * 
+     * Get information about Yandex.Disk
+     *
+     * @return \Illuminate\Http\Response
+     * 
      */
     public function getInfoDisk(): Response
     {

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-// use App\Http\Controllers\Controller;
 use App\Models\ListPdf;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -14,7 +13,7 @@ class WorkflowController extends BaseApiController
      *     path="/generate-pdf",
      *     operationId="makePdf",
      *     tags={"WorkFlow"},
-     *     summary="Generate pdf by got data and save it in Yandex disk.",
+     *     summary="Generate pdf by got data and save it in Yandex.Disk (response has link to download and link to review)",
      *     security={
      *       {"api-token": {}},
      *     },
@@ -36,7 +35,7 @@ class WorkflowController extends BaseApiController
      *     )
      * )
      *
-     * Generate pdf by got data and save it in Yandex disk.
+     * Generate pdf by got data and save it in Yandex.Disk
      * 
      * @param \Illuminate\Http\Request $request
      *
@@ -48,8 +47,7 @@ class WorkflowController extends BaseApiController
         $data = $request->all();
         info($data);
 
-        if ($data == [])
-            return response(json_encode(['error' => 'data is not given']), 422);
+        if ($data == []) return response(json_encode(['error' => 'data is not given']), 422);
 
         PdfController::generatePdf($data);
         $result = YandexDiskController::store();
@@ -63,14 +61,14 @@ class WorkflowController extends BaseApiController
      *     path="/delete/{pdf}",
      *     operationId="deleteById",
      *     tags={"WorkFlow"},
-     *     summary="Delete pdf from Yandex disk and information from database on server.",
+     *     summary="Delete file by id from Yandex.Disk and information from database on server",
      *     security={
      *       {"api-token": {}},
      *     },
      *     @OA\Parameter(
      *         name="pdf",
      *         in="path",
-     *         description="Pdf number",
+     *         description="File id",
      *         required=true,
      *         @OA\Schema(
      *             type="integer",
@@ -79,10 +77,11 @@ class WorkflowController extends BaseApiController
      *     @OA\Response(
      *          response=200,
      *          description="OK",
-     *          @OA\MediaType(
-     *              mediaType="application/json",
-     *          )
-     *      )
+     *      ),
+     *      @OA\Response(
+     *         response="404",
+     *         description="Not Found"
+     *      ),
      * )
      * 
      * Delete pdf by id from all place.
@@ -99,7 +98,31 @@ class WorkflowController extends BaseApiController
             return response(json_encode(['success' => 'pdf has been destroyed']), 200);
     }
 
-    public function deleteAllFiles()
+    /**
+     * @OA\Delete(
+     *     path="/delete-all",
+     *     operationId="deleteAll",
+     *     tags={"WorkFlow"},
+     *     summary="Delete all files from Yandex.Disk and information from database on server",
+     *     security={
+     *       {"api-token": {}},
+     *     },
+     *     @OA\Response(
+     *          response=200,
+     *          description="OK",
+     *      ),
+     *      @OA\Response(
+     *         response="404",
+     *         description="Not Found"
+     *      ),
+     * )
+     * 
+     * Delete all files from all place.
+     *
+     * @return \Illuminate\Http\Response
+     * 
+     */
+    public function deleteAllFiles(): Response
     {
         ListPdf::chunk(100, function ($pdfs) {
             foreach ($pdfs as $pdf) {

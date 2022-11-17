@@ -22,7 +22,7 @@ use App\Http\Controllers\Controller;
  * )
  * @OA\Tag(
  *     name="YandexDisk",
- *     description="Some work with yandex disk",
+ *     description="Some jobs with Yandex.Disk",
  * )
  * @OA\Server(
  *     description="Generation pdf - API server",

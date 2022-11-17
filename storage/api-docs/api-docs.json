@@ -23,7 +23,7 @@
                 "tags": [
                     "WorkFlow"
                 ],
-                "summary": "Generate pdf by got data and save it in Yandex disk.",
+                "summary": "Generate pdf by got data and save it in Yandex.Disk (response has link to download and link to review)",
                 "operationId": "makePdf",
                 "requestBody": {
                     "required": true,
@@ -58,13 +58,13 @@
                 "tags": [
                     "WorkFlow"
                 ],
-                "summary": "Delete pdf from Yandex disk and information from database on server.",
+                "summary": "Delete file by id from Yandex.Disk and information from database on server",
                 "operationId": "deleteById",
                 "parameters": [
                     {
                         "name": "pdf",
                         "in": "path",
-                        "description": "Pdf number",
+                        "description": "File id",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -73,10 +73,54 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {}
-                        }
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "api-token": []
+                    }
+                ]
+            }
+        },
+        "/delete-all": {
+            "delete": {
+                "tags": [
+                    "WorkFlow"
+                ],
+                "summary": "Delete all files from Yandex.Disk and information from database on server",
+                "operationId": "deleteAll",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "api-token": []
+                    }
+                ]
+            }
+        },
+        "/get-info-disk": {
+            "get": {
+                "tags": [
+                    "YandexDisk"
+                ],
+                "summary": "Get information about Yandex.Disk",
+                "operationId": "infoDisk",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 },
                 "security": [
@@ -90,8 +134,8 @@
     "components": {
         "schemas": {
             "WorkFlowMakeProcessByDataRequest": {
-                "title": "Example showing request",
-                "description": "Some simple request createa as example",
+                "title": "Example - what data should the body consist of",
+                "description": "Some simple request create as example",
                 "properties": {
                     "id": {
                         "title": "ID",
@@ -130,7 +174,7 @@
         },
         {
             "name": "YandexDisk",
-            "description": "Some work with yandex disk"
+            "description": "Some jobs with Yandex.Disk"
         }
     ]
 }
