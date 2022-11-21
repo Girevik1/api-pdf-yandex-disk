@@ -21,7 +21,7 @@ Route::group([
 ], function () {
     // Common actions
     Route::post('/generate-pdf', [WorkflowController::class, 'makeProcessByData']);
-    Route::delete('/delete/{pdf}', [WorkflowController::class, 'deleteById']);
+    Route::delete('/delete/{pdf}', [WorkflowController::class, 'deleteByUuid']);
     Route::delete('/delete-all', [WorkflowController::class, 'deleteAllFiles']);
 
     // Yandex

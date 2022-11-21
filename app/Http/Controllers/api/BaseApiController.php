@@ -31,8 +31,8 @@ use App\Http\Controllers\Controller;
  * @OA\SecurityScheme(
  *     type="apiKey",
  *     in="header",
- *     name="api-token",
- *     securityScheme="api-token"
+ *     name="x-api-token",
+ *     securityScheme="x-api-token"
  * )
  */
 class BaseApiController extends Controller

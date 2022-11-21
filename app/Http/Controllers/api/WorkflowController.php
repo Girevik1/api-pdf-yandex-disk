@@ -15,7 +15,7 @@ class WorkflowController extends BaseApiController
      *     tags={"WorkFlow"},
      *     summary="Generate pdf by got data and save it in Yandex.Disk (response has link to download and link to review)",
      *     security={
-     *       {"api-token": {}},
+     *       {"x-api-token": {}},
      *     },
      *     @OA\Response(
      *         response="200",
@@ -58,20 +58,20 @@ class WorkflowController extends BaseApiController
 
     /**
      * @OA\Delete(
-     *     path="/delete/{pdf}",
+     *     path="/delete/{uuid}",
      *     operationId="deleteById",
      *     tags={"WorkFlow"},
-     *     summary="Delete file by id from Yandex.Disk and information from database on server",
+     *     summary="Delete file by uuid from Yandex.Disk and information from database on server",
      *     security={
-     *       {"api-token": {}},
+     *       {"x-api-token": {}},
      *     },
      *     @OA\Parameter(
-     *         name="pdf",
+     *         name="uuid",
      *         in="path",
-     *         description="File id",
+     *         description="uuid file",
      *         required=true,
      *         @OA\Schema(
-     *             type="integer",
+     *             type="string",
      *         )
      *     ),
      *     @OA\Response(
@@ -91,7 +91,7 @@ class WorkflowController extends BaseApiController
      * @return \Illuminate\Http\Response
      * 
      */
-    public function deleteById(ListPdf $pdf): Response
+    public function deleteByUuid(ListPdf $pdf): Response
     {
         YandexDiskController::destroyFile($pdf->id, true);
         if ($pdf->delete())
@@ -105,7 +105,7 @@ class WorkflowController extends BaseApiController
      *     tags={"WorkFlow"},
      *     summary="Delete all files from Yandex.Disk and information from database on server",
      *     security={
-     *       {"api-token": {}},
+     *       {"x-api-token": {}},
      *     },
      *     @OA\Response(
      *          response=200,
@@ -131,6 +131,6 @@ class WorkflowController extends BaseApiController
             }
         });
 
-        return response(json_encode(['success' => 'All pdfs have been destroyed']), 200);
+        return response(json_encode(['success' => 'All files have been destroyed']), 200);
     }
 }

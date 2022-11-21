@@ -48,26 +48,26 @@
                 },
                 "security": [
                     {
-                        "api-token": []
+                        "x-api-token": []
                     }
                 ]
             }
         },
-        "/delete/{pdf}": {
+        "/delete/{uuid}": {
             "delete": {
                 "tags": [
                     "WorkFlow"
                 ],
-                "summary": "Delete file by id from Yandex.Disk and information from database on server",
+                "summary": "Delete file by uuid from Yandex.Disk and information from database on server",
                 "operationId": "deleteById",
                 "parameters": [
                     {
-                        "name": "pdf",
+                        "name": "uuid",
                         "in": "path",
-                        "description": "File id",
+                        "description": "uuid file",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -81,7 +81,7 @@
                 },
                 "security": [
                     {
-                        "api-token": []
+                        "x-api-token": []
                     }
                 ]
             }
@@ -103,7 +103,7 @@
                 },
                 "security": [
                     {
-                        "api-token": []
+                        "x-api-token": []
                     }
                 ]
             }
@@ -125,7 +125,7 @@
                 },
                 "security": [
                     {
-                        "api-token": []
+                        "x-api-token": []
                     }
                 ]
             }
@@ -160,9 +160,9 @@
             }
         },
         "securitySchemes": {
-            "api-token": {
+            "x-api-token": {
                 "type": "apiKey",
-                "name": "api-token",
+                "name": "x-api-token",
                 "in": "header"
             }
         }

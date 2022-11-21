@@ -26,41 +26,41 @@ class YandexDiskController extends BaseApiController
     public static function store(): array|Response
     {
         $thisObject = new self;
-        $lastPdf = ListPdf::latest()->first();
-        $countPdf = $lastPdf ? $lastPdf->id : 0;
 
-        $resource = $thisObject->disk->getResource('offer_' . $countPdf + 1 . '.pdf');
+        // Сохраняем у себя в бд информацию о созданом на янд диске файле
+        $newPdf = new ListPdf();
+        $newPdf->save(); //
+
+        $resource = $thisObject->disk->getResource($newPdf->id . '.pdf');
 
         // загружает локальный файл на диск, второй параметр отвечает за перезапись файла, если такой есть на диске.
         $resource->upload(public_path() . '/pdf/offer.pdf', true);
 
         $resource = $resource->toArray(); // получаем массив данных о созданом файле
 
-        // Сохраняем у себя в бд информацию о созданом на янд диске файле
-        $newPdf = new ListPdf();
         $newPdf->data = json_encode($resource);
-        $newPdf->save(); //
+        $newPdf->save();
 
         return [
             'size' => $resource['size'],
-            'link_doc_download' => $resource['file'],
-            'link_doc_viewer' => $resource['docviewer'],
+            'uuid' => $newPdf->id,
+            'link_file_download' => $resource['file'],
         ];
     }
 
     /**
-     *  Delete file by id to recycle bin and empty recycle bin
+     *  Delete file by uuid to recycle bin and empty recycle bin
      * 
-     * @param   string|int $id id файла,заданного при сох-ии в бд
+     * @param   string|int $uuid uuid файла,заданного при сох-ии в бд
      * 
      * @param   boolean $permanently TRUE Признак безвозвратного удаления
      *
      * @return  void
      */
-    public static function destroyFile(string|int $id, bool $isPermanently): void
+    public static function destroyFile(string $uuid, bool $isPermanently): void
     {
         $thisObject = new self;
-        $resource = $thisObject->disk->getResource('offer_' . $id . '.pdf');
+        $resource = $thisObject->disk->getResource($uuid . '.pdf');
 
         if (!$resource->has()) return;
         $resource->delete($isPermanently);
@@ -73,7 +73,7 @@ class YandexDiskController extends BaseApiController
      *     tags={"YandexDisk"},
      *     summary="Get information about Yandex.Disk",
      *     security={
-     *       {"api-token": {}},
+     *       {"x-api-token": {}},
      *     },
      *     @OA\Response(
      *          response=200,

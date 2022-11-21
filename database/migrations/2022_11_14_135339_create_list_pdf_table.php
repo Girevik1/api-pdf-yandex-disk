@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('list_pdf', function (Blueprint $table) {
-            $table->id();
-            $table->jsonb('data');
+            $table->uuid('id')->primary();
+            $table->jsonb('data')->nullable();
             $table->timestamps();
         });
     }

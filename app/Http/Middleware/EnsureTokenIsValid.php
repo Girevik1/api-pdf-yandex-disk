@@ -16,7 +16,7 @@ class EnsureTokenIsValid
      */
     public function handle(Request $request, Closure $next)
     {
-        $value = $request->header('api-token');
+        $value = $request->header('x-api-token');
 
         if ($value != config('app.token_access_app'))
             return response(json_encode(['error' => 'Token is missing or not correct']), 422);

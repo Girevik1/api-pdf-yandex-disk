@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-// use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\Storage;
 
 class PdfController extends BaseApiController
 {
