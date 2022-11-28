@@ -148,10 +148,10 @@ height: 50px; */
      /* top:0 */
 }
 .result-yandex{
-    margin-top: 0px;
+    /* margin-top: 0px; */
     /* height: 300px; @important */
     /* flex: 1; */
-    display: inline-table;
+    display: inline-block;
     /* width: 270px; */
     width: 375px;
     vertical-align: top;
@@ -163,7 +163,7 @@ height: 50px; */
     /* clear: both; */ 
     /* position: absolute; */
     margin-top: 14px;
-    height: auto;
+    /* height: auto; */
 }
 .screenshot-yandex{
     
@@ -336,7 +336,7 @@ height: 50px; */
                         </div>
                     </div>
                 </div>
-               
+                
                 @foreach($dataToView['data']['payload']['keywords'] as $index => $keyword)
                                       
                
@@ -445,8 +445,10 @@ height: 50px; */
                             </div>        
                            
                         </div>
-                           
-                   
+                            {{-- @if ( $n % 25 == 0 ) --}}
+                        {{-- <div class="page-break"> </div> --}}
+                    {{-- @endif
+               
                     </div>
 
                     {{-- @foreach($dataToView['data']['payload']['yandex']['rik']['results'][1] as $key => $d) --}}

@@ -44,12 +44,15 @@ class WorkflowController extends BaseApiController
     public function makeProcessByData(Request $request): Response
     {
         $result = [];
-        $data = $request->all();
-        info($data);
+        $dataToView = $request->all();
+        // $data = json_decode($data, true);
 
-        if ($data == []) return response(json_encode(['error' => 'data is not given']), 422);
+        info($dataToView);
 
-        PdfController::generatePdf($data);
+        if ($dataToView == []) return response(json_encode(['error' => 'data is not given']), 422);
+
+        PdfController::generatePdf($dataToView);
+        // dd($data);
         $result = YandexDiskController::store();
 
 
