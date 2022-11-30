@@ -45,14 +45,13 @@ class WorkflowController extends BaseApiController
     {
         $result = [];
         $dataToView = $request->all();
-        // $data = json_decode($data, true);
 
         info($dataToView);
 
-        if ($dataToView == []) return response(json_encode(['error' => 'data is not given']), 422);
+        if (!isset($dataToView['data']['payload'])) return response(json_encode(['error' => 'data is not given']), 422);
 
         PdfController::generatePdf($dataToView);
-        // dd($data);
+
         $result = YandexDiskController::store();
 
 

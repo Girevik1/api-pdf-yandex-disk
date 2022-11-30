@@ -191,6 +191,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Meneses\LaravelMpdf\LaravelMpdfServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -219,6 +220,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
+        'PDF' => Meneses\LaravelMpdf\Facades\LaravelMpdf::class
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
